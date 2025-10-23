@@ -41,22 +41,27 @@ class TwoPlanarArm {
 		const change = {};
 
 		// if change has theta 1 and theta 2 then, directly draw
-		// if change has x, y then compute inverse kinematics then draw
+		// if change has X, Y then compute inverse kinematics then draw
 		if (object.theta1) {
 			change.theta1 = object.theta1 * -1;
 			change.theta2 = object.theta2 * -1;
 		} else {
-			const [x, y] = [object.x, object.y];
+			const [x, y] = [object.X, object.Y];
 			const theta2 = this.compute_theta2(x, y);
 			const theta1 = this.compute_theta1(x, y);
+
+			console.log(
+				theta1.map((item) => to_degree(item)),
+				theta2.map((item) => to_degree(item))
+			);
 
 			change.theta1 = theta1[0] * -1;
 			change.theta2 = theta2[0] * -1;
 		}
-		
+
 		const ctx = canvas.getContext("2d");
-		const [width, height] = [canvas.width, canvas.height];
-		
+		const [width, height] = [canvas.width, canvas.height / 2];
+
 		// drawing the base
 		ctx.fillStyle = "red";
 		ctx.fillRect((width - 100) / 2, height - 25, 100, 25);
@@ -104,6 +109,6 @@ const two_planer_arm = new TwoPlanarArm(70, 100);
 two_planer_arm.draw(canvas, {
 	// theta1: to_radian(120),
 	// theta2: to_radian(270),
-	x: -100,
-	y: 10,
+	X: 10,
+	Y: 100,
 });
