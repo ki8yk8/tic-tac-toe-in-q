@@ -38,16 +38,25 @@ class TwoPlanarArm {
 	}
 
 	draw(canvas, object) {
-		const change = {
-			theta1: object.theta1 * -1,
-			theta2: object.theta2 * -1,
-		};
+		const change = {};
 
-		const ctx = canvas.getContext("2d");
-		const [width, height] = [canvas.width, canvas.height];
 		// if change has theta 1 and theta 2 then, directly draw
 		// if change has x, y then compute inverse kinematics then draw
+		if (object.theta1) {
+			change.theta1 = object.theta1 * -1;
+			change.theta2 = object.theta2 * -1;
+		} else {
+			const [x, y] = [object.x, object.y];
+			const theta2 = this.compute_theta2(x, y);
+			const theta1 = this.compute_theta1(x, y);
 
+			change.theta1 = theta1[0] * -1;
+			change.theta2 = theta2[0] * -1;
+		}
+		
+		const ctx = canvas.getContext("2d");
+		const [width, height] = [canvas.width, canvas.height];
+		
 		// drawing the base
 		ctx.fillStyle = "red";
 		ctx.fillRect((width - 100) / 2, height - 25, 100, 25);
@@ -93,6 +102,8 @@ const canvas = document.getElementById("robotic-arm");
 
 const two_planer_arm = new TwoPlanarArm(70, 100);
 two_planer_arm.draw(canvas, {
-	theta1: to_radian(120),
-	theta2: to_radian(270),
+	// theta1: to_radian(120),
+	// theta2: to_radian(270),
+	x: -100,
+	y: 10,
 });
