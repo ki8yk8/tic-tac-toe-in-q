@@ -50,16 +50,12 @@ class TwoPlanarArm {
 			const theta2 = this.compute_theta2(x, y);
 			const theta1 = this.compute_theta1(x, y);
 
-			console.log(
-				theta1.map((item) => to_degree(item)),
-				theta2.map((item) => to_degree(item))
-			);
-
 			change.theta1 = theta1[0] * -1;
 			change.theta2 = theta2[0] * -1;
 		}
 
 		const ctx = canvas.getContext("2d");
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		const [width, height] = [canvas.width, canvas.height / 2];
 
 		// drawing the base
@@ -104,11 +100,22 @@ class TwoPlanarArm {
 }
 
 const canvas = document.getElementById("robotic-arm");
+const input_X = document.getElementById("input-X");
+const input_Y = document.getElementById("input-Y");
 
 const two_planer_arm = new TwoPlanarArm(70, 100);
 two_planer_arm.draw(canvas, {
-	// theta1: to_radian(120),
-	// theta2: to_radian(270),
-	X: 10,
+	X: 100,
 	Y: 100,
-});
+})
+
+input_X.addEventListener("change", handleReferenceChange);
+input_Y.addEventListener("change", handleReferenceChange);
+
+function handleReferenceChange() {
+	two_planer_arm.draw(canvas, {
+		X: input_X.value,
+		Y: input_Y.value,
+	});
+}
+
